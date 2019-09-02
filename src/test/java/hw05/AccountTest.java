@@ -38,7 +38,7 @@ public class AccountTest {
         driver.quit();
     }
 
-    @Test(timeout = 5000l)
+    @Test(timeout = 6000l)
     public void verifyFirstTipIsCorrect() {
         driver.findElement(By.xpath("//span[text()='Order history and details']")).click();
 
