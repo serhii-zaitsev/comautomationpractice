@@ -8,7 +8,6 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import java.util.concurrent.TimeUnit;
 
 public class AccountTest {
-
     static WebDriver driver;
 
     @Before
@@ -22,7 +21,6 @@ public class AccountTest {
         driver.findElement(By.id("passwd")).sendKeys("qwe123ASD");
 
         driver.findElement(By.id("SubmitLogin")).click();
-
     }
 
     @BeforeClass
@@ -32,7 +30,6 @@ public class AccountTest {
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
         driver.manage().timeouts().pageLoadTimeout(15, TimeUnit.SECONDS);
-
         driver.get("http://automationpractice.com/index.php");
     }
 
