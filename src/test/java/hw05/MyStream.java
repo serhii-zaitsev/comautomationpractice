@@ -41,13 +41,13 @@ public class MyStream {
 
         //Collection all li elements
         List<WebElement> allItems = driver.findElements(By.xpath("//div[@class='ac_results']/ul/li"));
-        System.out.println("Size = " + allItems.size());
+/*        System.out.println("Size = " + allItems.size());
         //Collection all li elements contain Dress
         List<WebElement> resItems = allItems.stream().filter(e -> e.getText().contains("Dress")).collect(Collectors.toList());
 
         for(WebElement we: resItems){
             System.out.println("Items with Dress : " + we.getText());
-        }
+        }*/
 
         Assert.assertTrue("Not all items contain Dress",
                 allItems.stream().allMatch(e -> e.getText().contains("Dress")));
