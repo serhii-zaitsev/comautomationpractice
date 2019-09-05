@@ -14,6 +14,23 @@ import java.util.stream.Collectors;
 
 public class MyStream {
 
+    public static boolean checkList(List<WebElement> list)
+    {
+        if (list.size() > 0)
+        {
+            for(WebElement we: list)
+            {
+                System.out.println("Items without Dress : " + we.getText());
+            }
+            return false;
+        }
+        else
+        {
+            System.out.println("All items contains Dress");
+            return true;
+        }
+    }
+
     static WebDriver driver;
 
     @BeforeClass
@@ -40,16 +57,14 @@ public class MyStream {
                 .sendKeys("Dress");
 
         //Collection all li elements
-        List<WebElement> allItems = driver.findElements(By.xpath("//div[@class='ac_results']/ul/li"));
-/*        System.out.println("Size = " + allItems.size());
-        //Collection all li elements contain Dress
-        List<WebElement> resItems = allItems.stream().filter(e -> e.getText().contains("Dress")).collect(Collectors.toList());
+//      List<WebElement> allItems = driver.findElements(By.xpath("//div[@class='ac_results']/ul/li"));
 
-        for(WebElement we: resItems){
-            System.out.println("Items with Dress : " + we.getText());
-        }*/
+        List<WebElement> wrongItems= driver.findElements(By.xpath("//div[@class='ac_results']/ul/li")).stream().filter(e -> !e.getText().contains("Dress")).collect(Collectors.toList());
 
-        Assert.assertTrue("Not all items contain Dress",
-                allItems.stream().allMatch(e -> e.getText().contains("Dress")));
-        }
+
+        Assert.assertTrue("Some items are not correct",
+                checkList(wrongItems));
+    }
+
+
 }
