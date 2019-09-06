@@ -1,4 +1,4 @@
-package lesson07.f_add_basetest.hw07_1;
+package lesson07_hw;
 
 import org.junit.experimental.categories.Categories;
 import org.junit.runner.RunWith;

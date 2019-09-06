@@ -1,11 +1,11 @@
-package lesson07.f_add_basetest.hw07_1;
+package lesson07_hw;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
-import static lesson07.f_add_basetest.hw07_1.BaseTest.driver;
+import static lesson07_hw.BaseTest.driver;
 
 public class AccountPage {
 
