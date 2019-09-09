@@ -16,6 +16,7 @@ public class Test_Log_In_Out extends BaseTest {
     public void Log_In_To_Site_With_LogInMethod() {
         LoginPage loginPage = new LoginPage(driver);
         AccountPage accountPage = new AccountPage(driver);
+        loginPage.openPage();
         String username = "qwerty123@ukr.net";
         String password = "qwe123ASD";
 

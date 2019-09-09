@@ -9,11 +9,17 @@ import org.junit.runner.Description;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
-public abstract class BaseTest {
+public abstract class BaseTest extends SimpleAPI {
 
     protected static WebDriver driver;
+
 
     @Rule
     public TestWatcher testWatcher = new TestWatcher() {
@@ -51,12 +57,37 @@ public abstract class BaseTest {
         driver.manage().window().maximize();
 //        driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
         driver.manage().timeouts().pageLoadTimeout(15, TimeUnit.SECONDS);
-
-        driver.get("http://automationpractice.com/index.php");
     }
 
     @AfterClass
     public static void tearDown() {
         driver.quit();
+    }
+
+    @Override
+    WebDriver getDriver() {
+        return driver;
+    }
+
+    void assertAll(Assertion... assertions) {
+        List<Throwable> errors = new ArrayList<>();
+        for (Assertion assertion : assertions) {
+            try {
+                assertion.assertSmth();
+            } catch (Throwable throwable) {
+                errors.add(throwable);
+            }
+        }
+        if (!errors.isEmpty()) {
+            throw new AssertionError(errors
+                    .stream()
+                    .map(assertionError -> "\n Failed" + assertionError.getMessage())
+                    .collect(Collectors.toList()).toString());
+        }
+    }
+
+    @FunctionalInterface
+    public interface Assertion {
+        void assertSmth();
     }
 }
