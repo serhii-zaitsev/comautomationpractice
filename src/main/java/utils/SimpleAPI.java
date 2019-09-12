@@ -1,74 +1,73 @@
-package lesson07_hw;
+package utils;
 
 import java.util.List;
 import java.util.function.Function;
 
+import org.checkerframework.checker.nullness.compatqual.NullableDecl;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import static lesson07_hw.Conditions.VISIBLE;
+import static utils.Conditions.VISIBLE;
 
 public abstract class SimpleAPI {
 
-    abstract WebDriver getDriver();
+    protected abstract WebDriver getDriver();
 
-    void open(String url) {
+    public void open(String url) {
         System.out.println(url + " is opening...");
         getDriver().get(url);
     }
 
-    WebElement $(By locator) {
+    protected WebElement $(By locator) {
         return $(locator, VISIBLE);
     }
 
-    WebElement $(String css) {
+    protected WebElement $(String css) {
         return $(By.cssSelector(css));
     }
 
-    WebElement $(By locator, Function<By, ExpectedCondition<WebElement>> condition) {
+    protected WebElement $(By locator, Function<By, ExpectedCondition<WebElement>> condition) {
         return waitFor(condition.apply(locator));
     }
 
-    WebElement $(By locator, Conditions condition) {
+    protected WebElement $(By locator, Conditions condition) {
         return waitFor(condition.getCondition().apply(locator));
     }
 
-    List<WebElement> $$(By locator) {
+    protected List<WebElement> $$(By locator) {
         return getDriver().findElements(locator);
     }
 
-    List<WebElement> $$(String css) {
+    protected List<WebElement> $$(String css) {
         return getDriver().findElements(By.cssSelector(css));
     }
 
-    List<WebElement> $$(By locator, Function<By, ExpectedCondition<List<WebElement>>> condition) {
+    protected List<WebElement> $$(By locator, Function<By, ExpectedCondition<List<WebElement>>> condition) {
         return waitFor(condition.apply(locator));
     }
 
-    List<WebElement> $$(By locator, int expNumberToBe) {
+    protected List<WebElement> $$(By locator, int expNumberToBe) {
         return $$(locator, loc -> ExpectedConditions.numberOfElementsToBe(loc, expNumberToBe));
     }
 
-    <T> T waitFor(ExpectedCondition<T> condition, long timeout) {
+/*    protected boolean $$(By locator, int elNo, String expText) {
+        $$(locator, loc -> ExpectedConditions.(loc, elNo));
+        return true;
+    }*/
+
+    protected <T> T waitFor(ExpectedCondition<T> condition, long timeout) {
         return (new WebDriverWait(getDriver(), timeout)).until(condition);
     }
 
-    <T> T waitFor(ExpectedCondition<T> condition) {
+    protected <T> T waitFor(ExpectedCondition<T> condition) {
         return waitFor(condition, 10l);
     }
 
 
-    void listNthElementHasText(By locator, int elNo, String expText){
-        try {
-            $$(locator, elNo).equals(expText);
-        } catch (IndexOutOfBoundsException e){
-            System.out.println("Invalid option = IndexOutOfBoundsException");
 
-            e.printStackTrace();
-        }
-    }
 }

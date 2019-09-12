@@ -1,4 +1,4 @@
-package lesson07_hw;
+package utils;
 import java.util.function.Function;
 
 import org.openqa.selenium.By;

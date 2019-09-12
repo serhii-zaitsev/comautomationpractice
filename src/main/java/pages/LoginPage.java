@@ -1,4 +1,4 @@
-package lesson07_hw;
+package pages;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -12,8 +12,9 @@ public class LoginPage extends BasePage {
     By email = By.id("email");
     By passwd = By.id("passwd");
     By submitBtn = By.id("SubmitLogin");
+    By orderHistory = By.xpath("//span[text()='Order history and details']");
 
-    void openPage() {
+    public void openPage() {
         open("http://automationpractice.com/index.php");
     }
 
@@ -46,6 +47,10 @@ public LoginPage(WebDriver driver) {
     public AccountPage clickSubmitBtn(){
         $(submitBtn).click();
         return new AccountPage(driver);
+    }
+
+    public void clickOrderHistory(){
+        $(orderHistory).click();
     }
 
     public boolean checkSignInBtn(){

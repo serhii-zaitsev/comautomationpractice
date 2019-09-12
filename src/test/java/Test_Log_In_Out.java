@@ -1,9 +1,8 @@
-package lesson07_hw;
-
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
-
+import pages.AccountPage;
+import pages.LoginPage;
 
 public class Test_Log_In_Out extends BaseTest {
 
