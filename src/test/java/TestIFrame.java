@@ -12,7 +12,7 @@ public class TestIFrame extends BaseTest {
 
     @Test
     @Category({Test_Log_In_Out.Category1.class})
-    public void Get_Text_From_Iframe_Test_Succesfully() {
+    public void Get_Text_From_Iframe() {
         LandingPage landingPage = new LandingPage(driver);
 
         landingPage.openPage();
