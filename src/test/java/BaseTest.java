@@ -15,41 +15,50 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.events.EventFiringWebDriver;
 
+import org.openqa.selenium.support.ui.ExpectedCondition;
 import utils.EventHandler;
 import utils.SimpleAPI;
 
 public abstract class BaseTest extends SimpleAPI {
 
-    String name;
-    private static final Logger LOG = LogManager.getLogger(BaseTest.class);
+    private static final Logger LOGGER = LogManager.getLogger(BaseTest.class);
 
     protected static WebDriver driver;
+
+    @Override
+    protected WebDriver getDriver() {
+        return driver;
+    }
 
     @Rule
     public TestWatcher testWatcher = new TestWatcher() {
         @Override
         protected void succeeded(Description description) {
-            LOG.info("Test '{}' - PASSED", description.getMethodName());
+            LOGGER.info(String
+                    .format("Test '%s' - PASSED", description.getMethodName()));
             super.succeeded(description);
         }
 
         @Override
         protected void failed(Throwable e, Description description) {
-            LOG.error("Test '{}' - FAILED due to: {}" +
+            LOGGER.info(String
+                    .format("Test '%s' - FAILED due to: %s",
                             description.getMethodName(),
-                    e.getMessage());
+                            e.getMessage()));
             super.failed(e, description);
         }
 
         @Override
         protected void skipped(AssumptionViolatedException e, Description description) {
-            LOG.info("Test '{}' - SKIPPED", description.getMethodName());
+            LOGGER.info(String
+                    .format("Test '%s' - SKIPPED", description.getMethodName()));
             super.skipped(e, description);
         }
 
         @Override
         protected void starting(Description description) {
-            LOG.info("Test '{}' - is starting ...", description.getMethodName());
+            LOGGER.info(String
+                    .format("Test '%s' - is starting...", description.getMethodName()));
             super.starting(description);
         }
     };
@@ -60,21 +69,23 @@ public abstract class BaseTest extends SimpleAPI {
         wd.register(new EventHandler());
 
         driver = wd;
-        LOG.debug("ChromeDriver has been started");
-        driver.manage().window().maximize();
-//        driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
+        LOGGER.debug("WebDriver has been started");
         driver.manage().timeouts().pageLoadTimeout(15, TimeUnit.SECONDS);
+        driver.manage().window().maximize();
     }
 
     @AfterClass
     public static void tearDown() {
         driver.quit();
-        LOG.debug("ChromeDriver has been shut down");
+        LOGGER.debug("WebDriver has been shut down");
     }
 
-    @Override
-    protected WebDriver getDriver() {
-        return driver;
+    void assertThat(ExpectedCondition<Boolean> condition) {
+        assertThat(condition, 10l);
+    }
+
+    void assertThat(ExpectedCondition<Boolean> condition, long timeout) {
+        waitFor(condition, timeout);
     }
 
     void assertAll(Assertion... assertions) {
