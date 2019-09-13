@@ -4,6 +4,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import pages.LandingPage;
 import pages.LoginPage;
 
@@ -38,6 +39,28 @@ public class MyFirstTest extends BaseTest {
                 () -> Assert.assertThat(firstTipText, CoreMatchers.containsString(query2)),
                 () -> Assert.assertThat(firstTipText, CoreMatchers.containsString(query2 + "1"))
         );
+    }
+
+    @Test
+    public void verifyFirst_TipIsCorrectlyUpdatedAfterEnteringNewQuery() {
+        LandingPage landingPage = new LandingPage(driver);
+        String query1 = "Dress";
+        String query2 = "T-shirt";
+
+        landingPage.searchFor(query1);
+        (new WebDriverWait(driver, 10))
+                .until(ExpectedConditions.visibilityOfElementLocated(landingPage.firstTip));
+        Assert.assertThat(landingPage.getFirstTipText(),
+                CoreMatchers.containsString("Dress"));
+
+        landingPage.searchFor(query2);
+
+        (new WebDriverWait(driver, 10))
+                .until(ExpectedConditions.textToBePresentInElementLocated(landingPage.firstTip, "T-shirt"));
+
+        Assert.assertThat(
+                landingPage.getFirstTipText(),
+                CoreMatchers.containsString("T-shirt"));
     }
 
 /*    @Test
