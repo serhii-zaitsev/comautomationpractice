@@ -13,7 +13,7 @@ public class LandingPage extends BasePage {
 
     By searchBox = By.id("search_query_top");
     By tips = By.xpath("//*[@id=\"index\"]/div[2]/ul/li");
-    By firstTip = By.xpath("//*[@id=\"index\"]/div[2]/ul/li[1]");
+    public By firstTip = By.xpath("//*[@id=\"index\"]/div[2]/ul/li[1]");
     By submit_search = By.name("submit_search");
 
     public LandingPage(WebDriver driver) {
@@ -27,7 +27,6 @@ public class LandingPage extends BasePage {
     public void searchFor(String searchQuery) {
         $(searchBox, Conditions.CLICKABLE).clear();
         $(searchBox).sendKeys(searchQuery);
-
         //$$(tips, 5);
     }
 
@@ -46,6 +45,19 @@ public class LandingPage extends BasePage {
     public void clickSubmitSearch() {
         $(submit_search).click();
     }
+
+
+    public void getTextIframe() {
+
+        getDriver().switchTo().frame("f2c21840f3f93bc");
+    }
+
+
+
+
+
+
+
 
 /*    public ExpectedCondition<Boolean> listNthElementHasText(List<WebElement> allTips, int elNo, String expText) {
         return new ExpectedCondition<Boolean>() {

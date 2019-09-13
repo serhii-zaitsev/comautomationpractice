@@ -13,6 +13,7 @@ public class LoginPage extends BasePage {
     By passwd = By.id("passwd");
     By submitBtn = By.id("SubmitLogin");
     By orderHistory = By.xpath("//span[text()='Order history and details']");
+    //By orderHistory = By.xpath("//iframe[@title='fb:like_box Facebook Social Plugin']");
 
     public void openPage() {
         open("http://automationpractice.com/index.php");
@@ -42,6 +43,7 @@ public LoginPage(WebDriver driver) {
         enterUsername(username);
         enterPassword(password);
         clickSubmitBtn();
+        waitForDocumentCompleteState();
     }
 
     public AccountPage clickSubmitBtn(){
