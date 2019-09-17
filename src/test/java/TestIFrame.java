@@ -5,6 +5,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import pages.LandingPage;
 
 
@@ -21,18 +23,17 @@ public class TestIFrame extends BaseTest {
         JavascriptExecutor jse = (JavascriptExecutor)driver;
 
 
-             /*   (new WebDriverWait(driver, 10))
-                .until(ExpectedConditions.frameToBeAvailableAndSwitchToIt("f2c21840f3f93bc"));*/
+              (new WebDriverWait(driver, 10))
+                .until(ExpectedConditions.frameToBeAvailableAndSwitchToIt("f2c21840f3f93bc"));
 
-            driver.switchTo().frame("f2c21840f3f93bc");
-        //WebElement element = driver.findElement(By.xpath("//span[@itemprop='telephone']"));
-        //jse.executeScript("return arguments[0].text", element);
-        jse.executeScript("window.scrollBy(0,500)");
+
 
         WebElement webl = driver.findElement(By.xpath("//iframe[@name='f2c21840f3f93bc']"));
 
         String text = (String) jse.executeScript("return arguments[0].text;", webl);
         System.out.println("title" + text);
+
+        ((JavascriptExecutor)driver).executeScript("arguments[0].scrollIntoView(true);",webl);
 
     }
 
