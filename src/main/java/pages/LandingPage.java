@@ -22,6 +22,7 @@ public class LandingPage extends BasePage {
 
     public void openPage() {
         open("http://automationpractice.com/index.php");
+        waitForDocumentCompleteState();
     }
 
     public void searchFor(String searchQuery) {

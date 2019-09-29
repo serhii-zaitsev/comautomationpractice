@@ -22,7 +22,7 @@ import static org.openqa.selenium.support.ui.ExpectedConditions.titleContains;
 public class MyFirstTest extends BaseTest {
 
     @Test
-    public void verifyFirstTipIsCorrectlyUpdatedAfterEnteringNewQuery() {
+    public void verify_First_Tip_Is_Correctly_Updated_After_Entering_New_Query() {
         LandingPage landingPage = new LandingPage(driver);
         landingPage.openPage();
         String query1 = "Dress";

@@ -1,11 +1,14 @@
 package utils;
 
+import static org.openqa.selenium.support.ui.ExpectedConditions.elementToBeClickable;
+import static utils.Conditions.VISIBLE;
+
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.function.Function;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.*;
@@ -13,24 +16,39 @@ import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import static utils.Conditions.VISIBLE;
-
 public abstract class SimpleAPI {
 
-    protected abstract WebDriver getDriver();
-    private static final Logger LOG = LogManager.getLogger(SimpleAPI.class);
+    private static final Logger LOGGER = LogManager.getLogger(SimpleAPI.class);
 
-    public void open(String url) {
-        System.out.println(url + " is opening...");
+    protected abstract WebDriver getDriver();
+
+    protected void open(String url) {
         getDriver().get(url);
+    }
+
+    public String getPageTitle() {
+        return getDriver().getTitle();
+    }
+
+    protected void captureScreenshot(String methodName) {
+        File screenshot = ((TakesScreenshot)getDriver())
+                .getScreenshotAs(OutputType.FILE);
+        String screenshotName = screenshot.getName().replace("screenshot", methodName + "_");
+        String path = System.getProperty("report.path") + "/screenshots/" + screenshotName;
+        try {
+            FileUtils.copyFile(screenshot, new File(path));
+            LOGGER.error("Screenshot was got: " + screenshotName);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     protected WebElement $(By locator) {
         return $(locator, VISIBLE);
     }
 
-    protected WebElement $(String css) {
-        return $(By.cssSelector(css));
+    protected WebElement $(String xpath) {
+        return $(By.xpath(xpath));
     }
 
     protected WebElement $(By locator, Function<By, ExpectedCondition<WebElement>> condition) {
@@ -45,8 +63,8 @@ public abstract class SimpleAPI {
         return getDriver().findElements(locator);
     }
 
-    protected List<WebElement> $$(String css) {
-        return getDriver().findElements(By.cssSelector(css));
+    protected List<WebElement> $$(String xpath) {
+        return getDriver().findElements(By.xpath(xpath));
     }
 
     protected List<WebElement> $$(By locator, Function<By, ExpectedCondition<List<WebElement>>> condition) {
@@ -57,17 +75,32 @@ public abstract class SimpleAPI {
         return $$(locator, loc -> ExpectedConditions.numberOfElementsToBe(loc, expNumberToBe));
     }
 
-/*    protected boolean $$(By locator, int elNo, String expText) {
-        $$(locator, loc -> ExpectedConditions.(loc, elNo));
-        return true;
-    }*/
+    protected void setValue(WebElement element, String value) {
+        clickOn(element);
+        element.clear();
+        element.sendKeys(value);
+    }
+
+    protected void setValue(By locator, String value) {
+        clickOn(locator);
+        $(locator).clear();
+        $(locator).sendKeys(value);
+    }
+
+    protected void clickOn(WebElement element) {
+        waitFor(elementToBeClickable(element)).click();
+    }
+
+    protected void clickOn(By locator) {
+        $(locator, Conditions.CLICKABLE).click();
+    }
 
     protected <T> T waitFor(ExpectedCondition<T> condition, long timeout) {
         return (new WebDriverWait(getDriver(), timeout)).until(condition);
     }
 
     protected <T> T waitFor(ExpectedCondition<T> condition) {
-        return waitFor(condition, 10l);
+        return waitFor(condition, 30l);
     }
 
     protected void waitForDocumentCompleteState() {
@@ -75,14 +108,11 @@ public abstract class SimpleAPI {
             waitFor(driver -> {
                 String documentState = (String) ((JavascriptExecutor) driver)
                         .executeScript("return document.readyState");
-                LOG.debug("Current document state is: {}", documentState);
+                LOGGER.debug("Current document state is: {}", documentState);
                 return "complete".equals(documentState);
             }, 30);
         } catch (TimeoutException e) {
-            LOG.warn("Can't wait till document.readyState is complete");
+            LOGGER.warn("Can't wait till document.readyState is complete");
         }
     }
-
-
-
 }

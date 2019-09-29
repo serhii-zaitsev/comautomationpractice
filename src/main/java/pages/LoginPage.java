@@ -17,6 +17,7 @@ public class LoginPage extends BasePage {
 
     public void openPage() {
         open("http://automationpractice.com/index.php");
+        waitForDocumentCompleteState();
     }
 
 ///////// Constructor ///////////
@@ -60,6 +61,10 @@ public LoginPage(WebDriver driver) {
             return true;
         }
             return false;
+    }
+
+    public String getErrorMessage() {
+        return $("//*[@id=\"center_column\"]/div[1]/ol/li").getText();
     }
 }
 //qwerty123@ukr.net
