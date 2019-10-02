@@ -19,13 +19,13 @@ public class LoginTest extends BaseGUITest {
         loginPage.openPage();
     }
 
-    @Test
+/*    @Test
     public void Verify_That_Login_Page_Can_Be_Opened(){
         // assert
         Assert.assertThat("Login page wasn't opened",
                 loginPage.getPageTitle(),
                 containsString("Login"));
-    }
+    }*/
 
     @Test
     public void Verify_That_User_Can_Login_Into_Private_Cabinet(){

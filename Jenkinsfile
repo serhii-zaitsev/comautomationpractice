@@ -1,20 +1,24 @@
 node('master') {
 
-	def mvn = '/var/jenkins_home/tools/hudson.tasks.Maven_MavenInstallation/mvn_3.6.2/bin/mvn'
+
+	def mvn = '/var/jenkins_home/tools/hudson.tasks.Maven_MavenInstallation/mvn_3.62/bin/mvn'
+	
 	def seleniumUrl = 'http://172.17.0.3:4444/wd/hub'
 
-	stage('checkout') {
-		checkout([$class: 'GitSCM', branches: [[name: '*/master']], browser: [$class: 'GithubWeb', repoUrl: ''], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'gihhub-ssh', url: 'git@github.com:QA-automation-engineer/test-automation-5.git']]])
-	}
+	
+stage('checkout') {
 
-	stage('Cross-browser testing') {
+		checkout([$class: 'GitSCM', branches: [[name: '*/comautomationpractice']], browser: [$class: 'GithubWeb', repoUrl: ''], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'github-ssh', url: 'git@github.com:serhii-zaitsev/comautomationpractice.git']]])
+    }
+	
+stage('Cross-browser testing') {
 		parallel "Chrome": {
 			def buildDir = 'target-chrome'
-			sh "${mvn} clean test -Dtest=lesson13.LoginTest -Dbrowser=Chrome -Dselenium.url=${seleniumUrl} -DbuildDirectory=${buildDir} -Dmaven.test.failure.ignore=true"
+			sh "${mvn} clean test -Dtest=**/LoginTest.java -Dbrowser=Chrome -Dselenium.url=${seleniumUrl} -DbuildDirectory=${buildDir} -Dmaven.test.failure.ignore=true"
 			junit "${buildDir}/surefire-reports/*.xml"
 		}, "Firefox": {
 			def buildDir = 'target-firefox'
-			sh "${mvn} clean test -Dtest=lesson13.LoginTest -Dbrowser=Firefox -Dselenium.url=${seleniumUrl} -DbuildDirectory=${buildDir} -Dmaven.test.failure.ignore=true"
+			sh "${mvn} clean test -Dtest=**/LoginTest.java -Dbrowser=Firefox -Dselenium.url=${seleniumUrl} -DbuildDirectory=${buildDir} -Dmaven.test.failure.ignore=true"
 			junit "${buildDir}/surefire-reports/*.xml"
 		}
 	}
