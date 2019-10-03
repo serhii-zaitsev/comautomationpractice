@@ -70,7 +70,7 @@
                     <useSystemClassLoader>false</useSystemClassLoader>
                     <systemPropertyVariables>
                         <report.path>./reports/build-${timestamp}</report.path>
-                        <!--<selenium.url>http://localhost:4444/wd/hub</selenium.url>-->
+                        <selenium.url>http://localhost:4444/wd/hub</selenium.url>
                         <browser>Chrome</browser>
                     </systemPropertyVariables>
                 </configuration>
