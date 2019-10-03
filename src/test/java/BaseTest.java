@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -107,6 +108,6 @@ public abstract class BaseTest extends SimpleAPI {
 
     @FunctionalInterface
     public interface Assertion {
-        void assertSmth();
+        void assertSmth() throws IOException;
     }
 }

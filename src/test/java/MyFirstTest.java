@@ -119,5 +119,43 @@ public class MyFirstTest extends BaseTest {
                 "milliner (la modiste - renée vert)"));
     }
 
+    @Test
+    public void verifyDownloadMyOrder() throws Exception {
+        // Given
+        LoginPage loginPage = new LoginPage(driver);
+        loginPage.openPage();
+        loginPage.logIn("trandafilov.vladimir@gmail.com", "password");
+        $("//*[@id=\"center_column\"]/div/div[1]/ul/li[1]/a/span").click();
+        waitFor(ExpectedConditions.titleContains("Order history"));
+        // When
+        FileDownloader fileDownloader = new FileDownloader(driver);
+        fileDownloader.setURI($("//*[@id=\"order-list\"]/tbody/tr/td[6]/a").getAttribute("href"));
+        File actualFile = fileDownloader.downloadFile();
+        int requestStatus = fileDownloader.getLastDownloadHTTPStatus();
+        // Then
+        assertAll(() -> Assert.assertThat("Check status.", requestStatus, is(200)),
+                () -> Assert.assertThat(new PdfComparator(new File("IN090063.pdf"), actualFile)
+                        .compare().writeTo("diffOutputOrder"), is(true)));
+    }
+
+    @Test
+    public void verifyDownloadMyOrderNegative() throws Exception {
+        // Given
+        LoginPage loginPage = new LoginPage(driver);
+        loginPage.openPage();
+        loginPage.logIn("trandafilov.vladimir@gmail.com", "password");
+        $("//*[@id=\"center_column\"]/div/div[1]/ul/li[1]/a/span").click();
+        waitFor(ExpectedConditions.titleContains("Order history"));
+        // When
+        FileDownloader fileDownloader = new FileDownloader(driver);
+        fileDownloader.setURI($("//*[@id=\"order-list\"]/tbody/tr/td[6]/a").getAttribute("href"));
+        File actualFile = fileDownloader.downloadFile();
+        int requestStatus = fileDownloader.getLastDownloadHTTPStatus();
+        // Then
+        assertAll(() -> Assert.assertThat("Check status.", requestStatus, is(200)),
+                () -> Assert.assertThat(new PdfComparator(new File("IN090057.pdf"), actualFile)
+                        .compare().writeTo("diffOutputPass"), is(false)));
+    }
+
 
 }
